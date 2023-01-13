@@ -1,0 +1,127 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<script>
+    let myLibrary = []
+    //constructor
+    function Book(title, author, pages, read) {
+            this.title = title,
+            this.author = author,
+            this.pages = pages,
+            this.read = read
+    }
+    //add book to the array
+    function addBookToLibrary() {
+
+        //Taking User Input Through Prompt
+        // var title = prompt("Enter title Of The Book:")
+        // var author = prompt("Enter Name Of Author:")
+        // var pages = prompt("Enter Number Of Pages:")
+        // var read = prompt("Read Or Not?:")
+        
+        let title = document.getElementById('btitle').value
+        let author = document.getElementById('bauthor').value
+        let pages = document.getElementById('bpages').value
+        let read = document.getElementById('breads').value
+
+        const b1 = new Book(title, author, pages, read)
+        myLibrary.push(b1)
+        document.getElementById('form').reset()
+        showData()
+        console.log(myLibrary)
+    }
+
+    //showing books data in the table format 
+    function showData()
+    {
+        var html = "<table border='1|1'>"
+        html += "<tr><th>Title</th><th>Author</th><th>Pages</th><th>Read Status</th><th>Action</th></tr>"
+        for (var i = 0; i < myLibrary.length; i++) {
+            html += "<tr>"
+            html += "<td>" + myLibrary[i].title + "</td>"
+            html += "<td>" + myLibrary[i].author + "</td>"
+            html += "<td>" + myLibrary[i].pages + "</td>"
+            html += "<td><input type='button' class = 'btn btn-secondary status' onclick = 'readStatus(event)' value = '" + myLibrary[i].read + "'/></td>"
+            html += "<td><input type='button' class = 'btn btn-secondary remove' onclick = 'removeBook("+i+",this)' value = 'Remove'/></td>"
+            html += "</tr>"
+
+        }
+        html += "</table>"
+        document.getElementById("box").innerHTML = html
+    }
+
+    //remove particular book from the array
+    function removeBook(x,y) {
+        
+        var i = y.parentNode.parentNode.rowIndex
+      
+        // let clickedElem = event.target
+        // let trElement = clickedElem.closest("tr")
+        // let removeElement = trElement.querySelector(".remove")
+
+        // myLibrary.splice(myLibrary.indexOf(removeElement),1)
+        // console.log("Index",myLibrary.indexOf(removeElement.value))
+        // document.getElementById("box").deleteRow(myLibrary.indexOf(removeElement))
+        
+        myLibrary.splice(x,1)  
+        document.getElementById("box").deleteRow(i)     
+        console.log(myLibrary)
+        
+    }
+
+    //changing read status 
+    function readStatus(event) {
+        let clickedElem = event.target
+        let trElement = clickedElem.closest("tr")
+        let statusElement = trElement.querySelector(".status")
+        if (statusElement.value == "yes")
+            statusElement.value = "no"
+        else
+            statusElement.value = "yes"
+    }
+
+    function openForm()
+    {
+        document.getElementById("form1").style.display = ''
+    }
+
+</script>
+
+<body>
+
+    <div class="container">
+        <input type="button" class="mt-5 btn btn-primary" onclick="openForm()" value="NEW BOOK">
+        <!-- <input type="button" class="mt-5 btn btn-primary" onclick="showData()" value="Show Data"> -->
+        <table class="table table-striped table-dark mt-3" id="box">
+        </table>
+        <div id="form1" style="display:none">
+            <form action="#" id="form" onsubmit="addBookToLibrary()"> 
+                <div class="form-group mt-3">
+                    <label>Book Title</label>
+                    <input type="text" class="form-control" id="btitle" placeholder="Enter Title Of The Book" required>
+                    
+                </div>
+                <div class="form-group">
+                    <label>Book Author</label>
+                    <input type="text" class="form-control" id="bauthor" placeholder="Enter Author Of The Book" required>
+                </div>
+                <div class="form-group">
+                    <label>Book Pages</label>
+                    <input type="text" class="form-control" id="bpages" placeholder="Enter No Of Pages Of The Book" required>
+                </div>
+                <div class="form-group">
+                    <label>Book Read Status</label>
+                    <input type="text" class="form-control" id="breads" placeholder="Enter Read Status Of The Book" required>
+                </div>
+                
+                <input type="submit" class="btn btn-primary" value="Save">
+                <input type="reset" class="btn btn-primary" value="Reset">
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>
