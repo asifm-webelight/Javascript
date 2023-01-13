@@ -1,0 +1,76 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    </head>
+    <script>
+        let myLibrary =[]        
+        //constructor
+        function Book(title, author, pages, read){
+            this.title = title, 
+            this.author = author,
+            this.pages = pages,
+            this.read = read
+        }
+        //add book to the array
+        function addBookToLibrary(){
+            
+            var title = prompt("Enter title Of The Book:")
+            var author = prompt("Enter Name Of Author:")
+            var pages = prompt("Enter Number Of Pages:")
+            var read = prompt("Read Or Not?:")
+
+            const b1 = new Book(title,author,pages,read)
+            myLibrary.push(b1)
+            //console.log(myLibrary)
+
+            //showing books data in the table format 
+            var html = "<table border='1|1'>";
+                html += "<tr><th>Title</th><th>Author</th><th>Pages</th><th>Read Status</th><th>Action</th></tr>"
+            for (var i = 0; i < myLibrary.length; i++) {
+                html += "<tr>"
+                html += "<td>"+myLibrary[i].title+"</td>"
+                html += "<td>"+myLibrary[i].author+"</td>"
+                html += "<td>"+myLibrary[i].pages+"</td>"
+                html += "<td><input type='button' id = 'rsts' class = 'btn btn-secondary' onclick = 'readStatus()' value = '"+myLibrary[i].read+"'/></td>"
+                html += "<td><input type='button' class = 'btn btn-secondary' onclick = 'removeBook(this)' value = 'Remove'/></td>"
+                html += "</tr>"
+
+            }
+            html+="</table>"
+            document.getElementById("box").innerHTML = html
+        }
+
+        //remove particular book from the array
+        function removeBook(r){
+            var i = r.parentNode.parentNode.rowIndex;
+            document.getElementById("box").deleteRow(i)
+
+        }
+
+        //changing read status 
+        function readStatus(){
+            var x = document.getElementById("rsts")
+            if(x.value == "yes")
+                x.value = "no"
+            else
+                x.value = "yes"
+        }
+       
+    </script>
+    <body>
+        
+        <div class="container">
+         <input type="button" class="mt-5 btn btn-primary" onclick="addBookToLibrary()" value="Add Book">
+         <table class="table table-striped table-dark mt-3" id="box">
+            <!-- <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Pages</th>
+                <th>Read Status</th>
+            </tr>    -->
+            <!-- <tbody >
+            </tbody> -->
+        </table> 
+    </div>
+    </body>
+</html>
