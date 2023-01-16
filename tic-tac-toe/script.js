@@ -19,7 +19,7 @@ const checkWin = () => {
     ]
     wins.forEach(e => {
         if ((boxtexts[e[0]].innerText === boxtexts[e[1]].innerText) && (boxtexts[e[2]].innerText === boxtexts[e[1]].innerText) && (boxtexts[e[0]].innerText !== "")) {
-            document.querySelector('.info').innerText = boxtexts[e[0]].innerText + " Won"
+            document.querySelector('.info').innerText = "Hurray !!!  " + boxtexts[e[0]].innerText + " Won"
             gameover = true
             document.querySelector(".line").style.width = "20vw"
             document.querySelector(".line").style.transform = `translate(${e[3]}vw, ${e[4]}vw) rotate(${e[5]}deg)`
