@@ -41,7 +41,7 @@ Array.from(boxes).forEach(element => {
     element.addEventListener('click', () => {
 
         count++
-        if (boxtext.innerText === '') {
+        if (boxtext.innerText === '' && gameover != true) {
             boxtext.innerText = turn
             turn = changeTurn()
             checkWin()
