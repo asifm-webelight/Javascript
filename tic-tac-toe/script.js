@@ -2,9 +2,10 @@ let turn = "X"
 let gameover = false
 
 const changeTurn = () => {
-    return turn === "X" ? "0" : "X"
+    return turn === "X" ? "O" : "X"
 }
 
+//Win Possibilities
 const checkWin = () => {
     let boxtexts = document.getElementsByClassName('boxtext');
     let wins = [
@@ -17,27 +18,43 @@ const checkWin = () => {
         [0, 4, 8, 5, 15, 45],
         [2, 4, 6, 5, 15, 135],
     ]
+
     wins.forEach(e => {
         if ((boxtexts[e[0]].innerText === boxtexts[e[1]].innerText) && (boxtexts[e[2]].innerText === boxtexts[e[1]].innerText) && (boxtexts[e[0]].innerText !== "")) {
-            document.querySelector('.info').innerText = "Hurray !!!  " + boxtexts[e[0]].innerText + " Won"
+            document.querySelector('.info').innerText = "Hurray !!!  " + boxtexts[e[0]].innerText + "  Won"
             gameover = true
+
+            let player_name = boxtexts[e[0]].innerText
+            if (player_name == "X" || player_name == "O") {
+                document.getElementById(player_name + "_score").innerText++
+            }
+
             document.querySelector(".line").style.width = "20vw"
             document.querySelector(".line").style.transform = `translate(${e[3]}vw, ${e[4]}vw) rotate(${e[5]}deg)`
         }
     })
 }
-
+let count = 0
 let boxes = document.getElementsByClassName("box")
 Array.from(boxes).forEach(element => {
     let boxtext = element.querySelector('.boxtext')
     element.addEventListener('click', () => {
 
+        count++
         if (boxtext.innerText === '') {
             boxtext.innerText = turn
             turn = changeTurn()
             checkWin()
             if (!gameover) {
-                document.getElementsByClassName("info")[0].innerText = "Turn For " + turn
+                document.getElementsByClassName("info")[0].innerText = "Player "+turn +"'s Turn"
+            }
+            if (count == 9) {
+                document.getElementsByClassName("info")[0].innerText = ""
+            }
+            if (gameover == false && document.getElementsByClassName("info")[0].innerText == "") {
+                document.getElementById("tie_score").innerText++
+                window.alert("Oh Man It's A Tie")
+                document.getElementById("reset").click()
             }
         }
     })
@@ -52,6 +69,7 @@ reset.addEventListener('click', () => {
     turn = "X"
     gameover = false
     document.querySelector(".line").style.width = "0vw"
-    document.getElementsByClassName("info")[0].innerText = "Turn For " + turn
-    
+    document.getElementsByClassName("info")[0].innerText = "Player "+turn +"'s Turn"
+    count = 0
+
 })
