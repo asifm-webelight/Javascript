@@ -46,7 +46,7 @@ Array.from(boxes).forEach(element => {
             turn = changeTurn()
             checkWin()
             if (!gameover) {
-                document.getElementsByClassName("info")[0].innerText = "Player "+turn +"'s Turn"
+                document.getElementsByClassName("info")[0].innerText = "Player " + turn + "'s Turn"
             }
             if (count == 9) {
                 document.getElementsByClassName("info")[0].innerText = ""
@@ -69,7 +69,7 @@ reset.addEventListener('click', () => {
     turn = "X"
     gameover = false
     document.querySelector(".line").style.width = "0vw"
-    document.getElementsByClassName("info")[0].innerText = "Player "+turn +"'s Turn"
+    document.getElementsByClassName("info")[0].innerText = "Player " + turn + "'s Turn"
     count = 0
 
 })
