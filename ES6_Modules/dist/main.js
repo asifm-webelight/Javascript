@@ -1,0 +1,1 @@
+(()=>{"use strict";const s=new class{constructor(s,e){this.name=s,this.age=e}}("Bruce Wayne",23);var e;console.log(s),e=s,console.log(`User's name is ${e.name}`),function(s){console.log(`User's age is ${s.age}`)}(s)})();
