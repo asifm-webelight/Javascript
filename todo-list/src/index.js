@@ -12,6 +12,8 @@ edit task
 
  */
 
-import createProject from "./project";
+
+import {createProject, loadProjects} from "./project";
 
 createProject()
+loadProjects()
