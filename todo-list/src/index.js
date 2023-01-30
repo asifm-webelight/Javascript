@@ -5,15 +5,16 @@
 // delete project
 
 
-add task[task name, date, priority, ]
+add task[task name, date, priority, ] to the respective project
 list task
 delete task
 edit task
 
  */
 
+import { createProject, load, loadProjects } from "./Project"
+import createTask from "./Tasks"
 
-import {createProject, loadProjects} from "./project";
-
-createProject()
 loadProjects()
+// createProject()
+// createTask()
