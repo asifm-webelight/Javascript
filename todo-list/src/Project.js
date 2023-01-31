@@ -1,3 +1,5 @@
+import loadTask from "./Tasks"
+
 let project_list = []
 
 if (localStorage.getItem('project_name') == null) {
@@ -6,6 +8,7 @@ if (localStorage.getItem('project_name') == null) {
 else {
     project_list = JSON.parse(localStorage.getItem('project_name'))
 }
+
 const project_form = document.getElementById("project-form")
 project_form.addEventListener('submit', event => {
     event.preventDefault()
@@ -17,33 +20,30 @@ project_form.addEventListener('submit', event => {
         project_name.focus()
     }
 })
-console.log(project_list.length)
+// console.log(project_list.length)
 
-function createProject() {
-}
 function addProject(name) {
     const project = {
         id: Date.now(),
         name,
-        tasks: [],
     }
     project_list.push(project)
-    // console.log('Array', project_list)
-    // console.log('Object', project)
     localStorage.setItem('project_name', JSON.stringify(project_list))
     loadProjects()
 }
+
 function loadProjects() {
     const project_list1 = document.getElementById("list_project")
-
     const content = JSON.parse(localStorage.getItem('project_name'))
-    // console.log(content)
+
     if (content != null) {
         for (var value of content) {
-            // console.log(value)
 
             const item = document.createElement("a")
+            const node = document.querySelector(`[data-key='${value.id}']`)
+            item.setAttribute('data-key', value.id)
             item.classList.add('list-group-item', 'list-group-item-action', 'd-flex', 'justify-content-between', 'align-items-center')
+            item.id = value.id
 
             const img = document.createElement("img")
             img.classList.add("delete")
@@ -51,25 +51,38 @@ function loadProjects() {
 
             const btn = document.createElement("button")
             btn.classList.add('btn', 'btn-sm', 'delete-project')
-            item.id = 'item'
             item.textContent = value.name
-            // console.log(value.name)
-            btn.appendChild(img)
-            item.appendChild(btn)
-            project_list1.appendChild(item)
-        }
 
+            if (node) {
+                btn.appendChild(img)
+                item.appendChild(btn)
+                project_list1.replaceChild(item, node)
+            }
+            else {
+                btn.appendChild(img)
+                item.appendChild(btn)
+                project_list1.appendChild(item)
+            }
+            //const btndel = document.getElementsByClassName('delete-project');
+            btn.addEventListener('click', () => {
+                var index = project_list.findIndex(x => x.id === Number(item.id))
+                deleteProject(index)
+            });
+            const h1 = document.getElementById('project_title')
+            item.addEventListener('click', (event) => {
+                h1.innerText = item.textContent
+                loadTask()
+                //item.classList.add('active')
+            })
+        }
     }
     //item.textContent = project.name //Through Array, it must be fetch from the localstorage
-
-    btn.addEventListener('click', event => {
-
-        deleteProject()
-    })
 }
 
-function deleteProject() {
-    //    console.log("Hey")
+function deleteProject(index) {
+    project_list.splice(index, 1)
+    localStorage.setItem('project_name', JSON.stringify(project_list))
+    location.reload()
 }
 
-export { createProject, loadProjects }
+export { loadProjects }

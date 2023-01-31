@@ -12,9 +12,9 @@ edit task
 
  */
 
-import { createProject, load, loadProjects } from "./Project"
+import { loadProjects } from "./Project"
+import loadTask from "./Tasks"
 import createTask from "./Tasks"
 
 loadProjects()
-// createProject()
-// createTask()
+// loadTask()
