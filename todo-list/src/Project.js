@@ -63,26 +63,32 @@ function loadProjects() {
                 item.appendChild(btn)
                 project_list1.appendChild(item)
             }
-            //const btndel = document.getElementsByClassName('delete-project');
             btn.addEventListener('click', () => {
                 var index = project_list.findIndex(x => x.id === Number(item.id))
+                var removeEle = document.getElementById(item.id)
+                removeEle.parentNode.removeChild(removeEle)
                 deleteProject(index)
             });
             const h1 = document.getElementById('project_title')
-            item.addEventListener('click', (event) => {
-                h1.innerText = item.textContent
+            if (h1.textContent == '') {
+                h1.textContent = item.textContent
                 loadTask()
-                //item.classList.add('active')
+            }
+            item.addEventListener('click', () => {
+                const list_task = document.getElementById('list_task')
+                list_task.textContent = ''
+                h1.textContent = item.textContent
+                loadTask()
             })
         }
     }
-    //item.textContent = project.name //Through Array, it must be fetch from the localstorage
 }
 
 function deleteProject(index) {
     project_list.splice(index, 1)
     localStorage.setItem('project_name', JSON.stringify(project_list))
     location.reload()
+    // loadProjects()
 }
 
 export { loadProjects }

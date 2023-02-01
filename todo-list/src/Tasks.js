@@ -29,7 +29,7 @@ todo_form.addEventListener('submit', event => {
     }
 })
 function addTask(name, date, priority, project_title) {
-    const task = {
+    let task = {
         id: Date.now(),
         checked: false,
         name,
@@ -37,22 +37,28 @@ function addTask(name, date, priority, project_title) {
         priority,
         project_title,
     }
+
     tasks_list.push(task)
+    //Sort Task Date Wise
+    tasks_list.sort((a, b) => {
+        let da = new Date(a.date),
+            db = new Date(b.date);
+        return da - db;
+    });
     localStorage.setItem('task_name', JSON.stringify(tasks_list))
+    const list_task = document.getElementById('list_task')
+    list_task.textContent = ''
     loadTask()
 }
 
 function loadTask() {
     const list_task = document.getElementById('list_task')
     const content = JSON.parse(localStorage.getItem('task_name'))
-    // console.log('Displaying Title', project_title.textContent)
 
     if (content != null) {
         for (var value of content) {
-            // console.log(tasks_list)
+            const row = document.createElement('div')
             if (project_title.textContent === value.project_title) {
-                // console.log('Displaying Values of title', value.project_title)
-                const row = document.createElement('div')
                 const node = document.querySelector(`[data-key='${value.id}']`)
                 row.setAttribute('data-key', value.id)
                 row.classList.add('row', 'g-3', 'mt-2')
@@ -60,34 +66,29 @@ function loadTask() {
 
                 const checked = document.createElement('div')
                 checked.classList.add('col-auto')
-
                 const check_input = document.createElement('input')
                 check_input.classList.add('form-check-input')
                 check_input.setAttribute('type', 'checkbox')
+                check_input.checked = value.checked
 
                 const itemdiv = document.createElement('div')
                 itemdiv.classList.add('col-8')
                 const item_label = document.createElement('label')
-                item_label.classList.add('strikethrough')
                 item_label.textContent = value.name
-                // item_label.setAttribute('data-key', value.id)
 
                 const datediv = document.createElement('div')
                 datediv.classList.add('col-1')
-
                 const date_label = document.createElement('label')
                 date_label.textContent = value.date
 
                 const priority_div = document.createElement('div')
                 priority_div.classList.add('col-auto')
-
                 const priority_btn = document.createElement('button')
                 priority_btn.classList.add('btn', 'btn-outline-primary', 'btn-sm')
                 priority_btn.textContent = value.priority
 
                 const deletediv = document.createElement('div')
                 deletediv.classList.add('col-auto')
-
                 const btndel = document.createElement('button')
                 btndel.classList.add('btn', 'btn-sm', 'delete-todo')
                 const deleteimg = document.createElement('img')
@@ -97,7 +98,6 @@ function loadTask() {
 
                 const editdiv = document.createElement('div')
                 editdiv.classList.add('col-auto')
-
                 const btnedit = document.createElement('button')
                 btnedit.classList.add('btn', 'btn-sm', 'edit-todo')
                 const editimg = document.createElement('img')
@@ -126,19 +126,43 @@ function loadTask() {
                 else {
                     list_task.appendChild(row)
                 }
-
-                btndel.addEventListener('click', () => {
+                btndel.addEventListener('click', (event) => {
                     var index = tasks_list.findIndex(x => x.id === Number(row.id))
+                    var removeEle = document.getElementById(row.id)
+                    removeEle.parentNode.removeChild(removeEle)
                     deleteTodo(index)
                 })
                 btnedit.addEventListener('click', () => {
                     var index = tasks_list.findIndex(x => x.id === Number(row.id))
-                    editTodo(index, value.project_title)
+                    editTodo(index, value.project_title, row.id)
+                })
+                if (check_input.checked) {
+                    row.style.color = 'gray'
+                    item_label.style.textDecoration = 'line-through'
+                    check_input.disabled = true
+                    // btnedit.disabled = true
+                    btnedit.style.display = 'none'
+                }
+                check_input.addEventListener('change', () => {
+                    var index = tasks_list.findIndex(x => x.id === Number(row.id))
+                    let state = tasks_list[index].checked
+                    if (state == false) {
+                        state = true
+                        row.style.color = 'gray'
+                        item_label.style.textDecoration = 'line-through'
+                        check_input.disabled = true
+                        btnedit.style.display = 'none'
+                        // btnedit.disabled = true
+                    }
+                    else {
+                        state = false
+                    }
+                    tasks_list[index].checked = state
+                    localStorage.setItem('task_name', JSON.stringify(tasks_list))
                 })
             }
         }
     }
-
 }
 
 function deleteTodo(index) {
@@ -146,19 +170,21 @@ function deleteTodo(index) {
     tasks_list.splice(index, 1)
     localStorage.setItem('task_name', JSON.stringify(tasks_list))
     loadTask()
-    // location.reload()
 }
-function editTodo(index, project_title) {
+function editTodo(index, project_title, row_id) {
     const edit_todo_form = document.getElementById('edit_todo_form')
-    edit_todo_form.addEventListener('submit', event => {
-        event.preventDefault()
+    edit_todo_form.addEventListener('submit', (event) => {
+        // event.preventDefault()
+        console.log('index:', index, 'project title', project_title, 'row id', row_id)
         let todo_name = document.getElementById('todo_name')
         let todo_date = document.getElementById('todo_date')
         let todo_priority = document.getElementById('todo_priority')
         let todo_pro_title = project_title
-        tasks_list.splice(index, 1)
+        if (tasks_list.splice(index, 1)) {
+            var removeEle = document.getElementById(row_id)
+            removeEle.parentNode.removeChild(removeEle)
+        }
         addTask(todo_name.value, todo_date.value, todo_priority.value, todo_pro_title)
-        loadTask()
         // location.reload()
     })
 }
